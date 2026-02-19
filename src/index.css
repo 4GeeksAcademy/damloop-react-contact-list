@@ -1,0 +1,187 @@
+/* ----------------------------- */
+/*   ESTILO GENERAL ELEGANTE     */
+/* ----------------------------- */
+
+body {
+    background: #f2f4f7;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 850px;
+}
+
+/* ----------------------------- */
+/*   NAVBAR                      */
+/* ----------------------------- */
+
+.navbar {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+/* ----------------------------- */
+/*   CONTACT CARD                */
+/* ----------------------------- */
+
+.contact-card {
+    border-radius: 14px;
+    background: #ffffff;
+    padding: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+}
+
+.contact-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+}
+
+/* FOTO DEL CONTACTO */
+.contact-card img {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #e5e7eb;
+    background: #fafafa;
+}
+
+/* TEXTO */
+.contact-card h5 {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.contact-card p {
+    margin: 0;
+    color: #555;
+}
+
+/* BOTONES */
+.btn-group .btn,
+.contact-card .btn {
+    border-radius: 8px !important;
+    padding: 0.45rem 0.8rem;
+    font-weight: 500;
+}
+
+/* ----------------------------- */
+/*   FORMULARIO                  */
+/* ----------------------------- */
+
+.add-contact-wrapper {
+    max-width: 520px;
+    margin: 2rem auto;
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+}
+
+.add-contact-wrapper h1 {
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.add-contact-form .form-label {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+
+.add-contact-form .form-control {
+    border-radius: 10px;
+    padding: 0.85rem;
+    border: 1px solid #d0d5dd;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-contact-form .form-control:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74,144,226,0.25);
+}
+
+.add-contact-form button.btn-primary {
+    padding: 0.85rem;
+    border-radius: 12px;
+    background: #4a90e2;
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: lowercase;
+}
+
+.add-contact-form button.btn-primary:hover {
+    background: #3b7ac4;
+}
+
+/* ----------------------------- */
+/*   BUSCADOR                    */
+/* ----------------------------- */
+
+.search-bar {
+    border-radius: 12px;
+    padding: 0.9rem;
+    font-size: 1.05rem;
+    border: 1px solid #d0d5dd;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-bar:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74,144,226,0.25);
+}
+
+/* ----------------------------- */
+/*   MODAL PERSONALIZADO         */
+/* ----------------------------- */
+
+.modal-backdrop-custom {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modal-custom {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    animation: fadeIn 0.25s ease-out;
+}
+
+.modal-custom h5 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.modal-custom p {
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+/* ANIMACIÓN */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
