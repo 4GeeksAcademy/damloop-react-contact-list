@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../js/store/appContext.jsx";
-
 import { useNavigate } from "react-router-dom";
 
 export const ContactCard = ({ contact }) => {

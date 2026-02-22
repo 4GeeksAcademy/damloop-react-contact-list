@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext.jsx";
-
 import { ContactCard } from "../../components/ContactCard.jsx";
 import { Link } from "react-router-dom";
 
@@ -22,7 +21,9 @@ export const Contact = () => {
             {store.contacts.length === 0 && !store.loading ? (
                 <p>No contacts yet. Create one!</p>
             ) : (
-                store.contacts.map((c) => <ContactCard key={c.id} contact={c} />)
+                store.contacts.map((c) => (
+                    <ContactCard key={c.id} contact={c} />
+                ))
             )}
         </div>
     );

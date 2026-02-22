@@ -1,10 +1,10 @@
 /* ----------------------------- */
-/*   ESTILO GENERAL ELEGANTE     */
+/*   DAMI CARTOON      */
 /* ----------------------------- */
 
 body {
-    background: #f2f4f7;
-    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #fef6e4;
+    font-family: "Fredoka", "Comic Neue", sans-serif;
     color: #333;
     margin: 0;
     padding: 0;
@@ -15,52 +15,71 @@ body {
 }
 
 /* ----------------------------- */
-/*   NAVBAR                      */
+/*   NAVBAR CARTOON              */
 /* ----------------------------- */
 
 .navbar {
+    background: #ffd803 !important;
+    border-bottom: 4px solid #222;
+    box-shadow: 4px 4px 0px #222;
     padding: 1rem 0;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 .navbar-brand {
-    font-weight: 600;
-    font-size: 1.25rem;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: #222 !important;
 }
 
 /* ----------------------------- */
-/*   CONTACT CARD                */
+/*   BOTONES CARTOON             */
+/* ----------------------------- */
+
+.btn {
+    border: 3px solid #222 !important;
+    border-radius: 12px !important;
+    font-weight: 600;
+    box-shadow: 3px 3px 0px #222;
+    transition: transform 0.1s ease;
+}
+
+.btn:active {
+    transform: translateY(2px);
+    box-shadow: 1px 1px 0px #222;
+}
+
+.btn-primary {
+    background: #ff8ba7 !important;
+    color: #222 !important;
+}
+
+.btn-danger {
+    background: #ff6b6b !important;
+}
+
+.btn-secondary {
+    background: #c3f0ca !important;
+}
+
+/* ----------------------------- */
+/*   CONTACT CARD CARTOON        */
 /* ----------------------------- */
 
 .contact-card {
-    border-radius: 14px;
+    border-radius: 20px;
     background: #ffffff;
-    padding: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    padding: 1.5rem;
+    border: 4px solid #222;
+    box-shadow: 6px 6px 0px #222;
+    transition: transform 0.15s ease;
 }
 
 .contact-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 22px rgba(0,0,0,0.12);
 }
 
-/* FOTO DEL CONTACTO */
-.contact-card img {
-    width: 85px;
-    height: 85px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #e5e7eb;
-    background: #fafafa;
-}
-
-/* TEXTO */
 .contact-card h5 {
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 0.3rem;
 }
 
@@ -69,16 +88,8 @@ body {
     color: #555;
 }
 
-/* BOTONES */
-.btn-group .btn,
-.contact-card .btn {
-    border-radius: 8px !important;
-    padding: 0.45rem 0.8rem;
-    font-weight: 500;
-}
-
 /* ----------------------------- */
-/*   FORMULARIO                  */
+/*   FORMULARIO CARTOON          */
 /* ----------------------------- */
 
 .add-contact-wrapper {
@@ -86,67 +97,37 @@ body {
     margin: 2rem auto;
     background: #ffffff;
     padding: 2.5rem;
-    border-radius: 16px;
-    box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+    border-radius: 20px;
+    border: 4px solid #222;
+    box-shadow: 6px 6px 0px #222;
 }
 
 .add-contact-wrapper h1 {
-    font-weight: 600;
+    font-weight: 700;
     text-align: center;
     margin-bottom: 1.5rem;
 }
 
 .add-contact-form .form-label {
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 0.3rem;
 }
 
 .add-contact-form .form-control {
-    border-radius: 10px;
-    padding: 0.85rem;
-    border: 1px solid #d0d5dd;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+    padding: 0.9rem;
+    border: 3px solid #222;
+    background: #fff;
 }
 
 .add-contact-form .form-control:focus {
-    border-color: #4a90e2;
-    box-shadow: 0 0 0 3px rgba(74,144,226,0.25);
-}
-
-.add-contact-form button.btn-primary {
-    padding: 0.85rem;
-    border-radius: 12px;
-    background: #4a90e2;
-    border: none;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    text-transform: lowercase;
-}
-
-.add-contact-form button.btn-primary:hover {
-    background: #3b7ac4;
+    outline: none;
+    border-color: #ff8ba7;
+    box-shadow: 0 0 0 4px rgba(255, 139, 167, 0.3);
 }
 
 /* ----------------------------- */
-/*   BUSCADOR                    */
-/* ----------------------------- */
-
-.search-bar {
-    border-radius: 12px;
-    padding: 0.9rem;
-    font-size: 1.05rem;
-    border: 1px solid #d0d5dd;
-    margin-bottom: 1.5rem;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.search-bar:focus {
-    border-color: #4a90e2;
-    box-shadow: 0 0 0 3px rgba(74,144,226,0.25);
-}
-
-/* ----------------------------- */
-/*   MODAL PERSONALIZADO         */
+/*   MODAL CARTOON               */
 /* ----------------------------- */
 
 .modal-backdrop-custom {
@@ -162,15 +143,16 @@ body {
 .modal-custom {
     background: #ffffff;
     padding: 2rem;
-    border-radius: 14px;
+    border-radius: 20px;
     width: 100%;
     max-width: 420px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border: 4px solid #222;
+    box-shadow: 6px 6px 0px #222;
     animation: fadeIn 0.25s ease-out;
 }
 
 .modal-custom h5 {
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 0.5rem;
 }
 
@@ -185,3 +167,29 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ----------------------------- */
+/*   FOOTER CARTOON              */
+/* ----------------------------- */
+
+footer {
+    background: #ffd803;
+    border-top: 4px solid #222;
+    box-shadow: 0 -4px 0px #222;
+}
+
+footer span {
+    font-weight: 600;
+    color: #222;
+}
+
+/* ----------------------------- */
+/*   OCULTAR CHECKBOXES          */
+/* ----------------------------- */
+
+.form-check,
+.form-switch,
+.form-check-input,
+.form-check-label,
+input[type="checkbox"] {
+    display: none !important;
+}

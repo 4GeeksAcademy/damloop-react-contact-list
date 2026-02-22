@@ -15,9 +15,9 @@ const getState = ({ getStore, getActions, setStore }) => {
         },
 
         actions: {
-            // -----------------------------
+            // --------------------------------------------------
             // CARGAR CONTACTOS
-            // -----------------------------
+            // --------------------------------------------------
             loadContacts: async () => {
                 setStore({ loading: true, error: null });
 
@@ -36,24 +36,23 @@ const getState = ({ getStore, getActions, setStore }) => {
                         throw new Error(data.msg || "Error cargando contactos");
                     }
 
-                    const contacts = Array.isArray(data)
-                        ? data
-                        : data.contacts || [];
-
-                    setStore({ contacts, loading: false });
+                    setStore({
+                        contacts: data.contacts || [],
+                        loading: false
+                    });
                 } catch (err) {
                     setStore({ error: err.message, loading: false });
                 }
             },
 
-            // -----------------------------
+            // --------------------------------------------------
             // CREAR CONTACTO
-            // -----------------------------
+            // --------------------------------------------------
             addContact: async (contact, navigate) => {
                 const { loadContacts } = getActions();
 
                 const body = {
-                    name: contact.full_name,   // ← CAMBIO IMPORTANTE
+                    name: contact.full_name,
                     email: contact.email,
                     phone: contact.phone,
                     address: contact.address,
@@ -71,11 +70,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                     );
 
                     const data = await resp.json();
-                    console.log("API response:", data);
-
                     if (!resp.ok) {
-                        console.error("API ERROR:", data);
-                        throw new Error(JSON.stringify(data));
+                        throw new Error(data.msg || "Error creando contacto");
                     }
 
                     await loadContacts();
@@ -85,14 +81,14 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            // -----------------------------
+            // --------------------------------------------------
             // ACTUALIZAR CONTACTO
-            // -----------------------------
+            // --------------------------------------------------
             updateContact: async (id, contact, navigate) => {
                 const { loadContacts } = getActions();
 
                 const body = {
-                    name: contact.full_name,   // ← CAMBIO IMPORTANTE
+                    name: contact.full_name,
                     email: contact.email,
                     phone: contact.phone,
                     address: contact.address,
@@ -107,10 +103,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                     });
 
                     const data = await resp.json();
-
                     if (!resp.ok) {
-                        console.error("API ERROR:", data);
-                        throw new Error(JSON.stringify(data));
+                        throw new Error(data.msg || "Error actualizando contacto");
                     }
 
                     await loadContacts();
@@ -120,22 +114,21 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            // -----------------------------
-            // ELIMINAR CONTACTO
-            // -----------------------------
+            // --------------------------------------------------
+            // ELIMINAR CONTACTO (CORREGIDO)
+            // --------------------------------------------------
             deleteContact: async (id) => {
                 const { loadContacts } = getActions();
 
                 try {
-                    const resp = await fetch(`${API_BASE}/contacts/${id}`, {
-                        method: "DELETE"
-                    });
-
-                    const data = await resp.json();
+                    const resp = await fetch(
+                        `${API_BASE}/agendas/${AGENDA_SLUG}/contacts/${id}`,
+                        { method: "DELETE" }
+                    );
 
                     if (!resp.ok) {
-                        console.error("API ERROR:", data);
-                        throw new Error(JSON.stringify(data));
+                        const text = await resp.text();
+                        throw new Error(text || "Error eliminando contacto");
                     }
 
                     await loadContacts();
@@ -144,9 +137,9 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            // -----------------------------
+            // --------------------------------------------------
             // CONTACTO ACTUAL PARA EDITAR
-            // -----------------------------
+            // --------------------------------------------------
             setCurrentContact: (contact) => {
                 setStore({ currentContact: contact });
             },

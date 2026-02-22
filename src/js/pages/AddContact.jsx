@@ -17,14 +17,30 @@ export const AddContact = () => {
     const isEdit = Boolean(params.id);
 
     useEffect(() => {
-        if (isEdit && store.currentContact && store.currentContact.id === parseInt(params.id)) {
-            setForm({
-                full_name: store.currentContact.full_name || "",
-                email: store.currentContact.email || "",
-                phone: store.currentContact.phone || "",
-                address: store.currentContact.address || ""
-            });
-        } else if (!isEdit) {
+        if (isEdit) {
+            // 1. Si currentContact existe, úsalo
+            if (store.currentContact && store.currentContact.id === parseInt(params.id)) {
+                setForm({
+                    full_name: store.currentContact.full_name || "",
+                    email: store.currentContact.email || "",
+                    phone: store.currentContact.phone || "",
+                    address: store.currentContact.address || ""
+                });
+            } else {
+                // 2. Si no existe, buscar en store.contacts (caso de recarga)
+                const found = store.contacts.find(c => c.id === parseInt(params.id));
+                if (found) {
+                    actions.setCurrentContact(found);
+                    setForm({
+                        full_name: found.full_name,
+                        email: found.email,
+                        phone: found.phone,
+                        address: found.address
+                    });
+                }
+            }
+        } else {
+            // Modo creación
             actions.clearCurrentContact();
             setForm({
                 full_name: "",
@@ -33,7 +49,7 @@ export const AddContact = () => {
                 address: ""
             });
         }
-    }, [isEdit, params.id, store.currentContact]);
+    }, [isEdit, params.id, store.currentContact, store.contacts]);
 
     const handleChange = (e) => {
         setForm({
@@ -44,6 +60,7 @@ export const AddContact = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (!form.full_name || !form.email || !form.phone || !form.address) {
             alert("Please fill all fields");
             return;
@@ -112,7 +129,7 @@ export const AddContact = () => {
                 </div>
 
                 <button type="submit" className="btn btn-primary w-100">
-                    save
+                    Save
                 </button>
             </form>
 
