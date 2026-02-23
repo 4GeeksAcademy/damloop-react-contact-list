@@ -5,6 +5,41 @@ export const Context = React.createContext(null);
 const getState = ({ getStore, getActions, setStore }) => {
     const API_BASE = "https://playground.4geeks.com/contact";
     const AGENDA_SLUG = "damloop_agenda";
+    const CONTACT_EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const normalizeApiContact = (contact) => ({
+        ...contact,
+        full_name: contact?.full_name || contact?.name || "",
+        email: contact?.email || "",
+        phone: contact?.phone || "",
+        address: contact?.address || ""
+    });
+
+    const getApiErrorMessage = async (response, fallbackMessage) => {
+        try {
+            const contentType = response.headers.get("content-type") || "";
+            if (contentType.includes("application/json")) {
+                const payload = await response.json();
+                if (payload?.msg) return payload.msg;
+                if (payload?.message) return payload.message;
+            } else {
+                const textPayload = await response.text();
+                if (textPayload) return textPayload;
+            }
+        } catch {
+            // Si falla el parseo, devolvemos mensaje por defecto
+        }
+
+        return fallbackMessage;
+    };
+
+    const buildContactPayload = (contact) => ({
+        name: (contact?.full_name || "").trim(),
+        email: (contact?.email || "").trim(),
+        phone: (contact?.phone || "").trim(),
+        address: (contact?.address || "").trim(),
+        agenda_slug: AGENDA_SLUG
+    });
 
     return {
         store: {
@@ -15,52 +50,81 @@ const getState = ({ getStore, getActions, setStore }) => {
         },
 
         actions: {
-            // --------------------------------------------------
-            // CARGAR CONTACTOS
-            // --------------------------------------------------
+            clearError: () => setStore({ error: null }),
+
+            ensureAgendaExists: async () => {
+                const response = await fetch(`${API_BASE}/agendas/${AGENDA_SLUG}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" }
+                });
+
+                // Esta API responde error si la agenda ya existe; eso no es fallo funcional.
+                if (!response.ok && ![400, 409].includes(response.status)) {
+                    const message = await getApiErrorMessage(
+                        response,
+                        "Error verificando la agenda"
+                    );
+                    throw new Error(message);
+                }
+            },
+
             loadContacts: async () => {
                 setStore({ loading: true, error: null });
 
                 try {
-                    // Crear agenda si no existe
-                    await fetch(`${API_BASE}/agendas/${AGENDA_SLUG}`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" }
-                    }).catch(() => {});
+                    await getActions().ensureAgendaExists();
 
-                    // Obtener contactos
-                    const resp = await fetch(`${API_BASE}/agendas/${AGENDA_SLUG}`);
-                    const data = await resp.json();
+                    const response = await fetch(`${API_BASE}/agendas/${AGENDA_SLUG}`);
 
-                    if (!resp.ok) {
-                        throw new Error(data.msg || "Error cargando contactos");
+                    if (!response.ok) {
+                        const message = await getApiErrorMessage(
+                            response,
+                            "Error cargando contactos"
+                        );
+                        throw new Error(message);
                     }
 
+                    const data = await response.json();
+                    const normalizedContacts = Array.isArray(data.contacts)
+                        ? data.contacts.map(normalizeApiContact)
+                        : [];
+
                     setStore({
-                        contacts: data.contacts || [],
+                        contacts: normalizedContacts,
                         loading: false
                     });
+                    return true;
                 } catch (err) {
                     setStore({ error: err.message, loading: false });
+                    return false;
                 }
             },
 
-            // --------------------------------------------------
-            // CREAR CONTACTO
-            // --------------------------------------------------
-            addContact: async (contact, navigate) => {
+            addContact: async (contact) => {
                 const { loadContacts } = getActions();
 
-                const body = {
-                    name: contact.full_name,
-                    email: contact.email,
-                    phone: contact.phone,
-                    address: contact.address,
-                    agenda_slug: AGENDA_SLUG
-                };
+                const body = buildContactPayload(contact);
+
+                if (!body.name || !body.email || !body.phone || !body.address) {
+                    setStore({
+                        loading: false,
+                        error: "Please fill in all fields before saving."
+                    });
+                    return false;
+                }
+
+                if (!CONTACT_EMAIL_REGEX.test(body.email)) {
+                    setStore({
+                        loading: false,
+                        error: "Please enter a valid email address."
+                    });
+                    return false;
+                }
+
+                setStore({ loading: true, error: null });
 
                 try {
-                    const resp = await fetch(
+                    const response = await fetch(
                         `${API_BASE}/agendas/${AGENDA_SLUG}/contacts`,
                         {
                             method: "POST",
@@ -69,79 +133,94 @@ const getState = ({ getStore, getActions, setStore }) => {
                         }
                     );
 
-                    const data = await resp.json();
-                    if (!resp.ok) {
-                        throw new Error(data.msg || "Error creando contacto");
+                    if (!response.ok) {
+                        const message = await getApiErrorMessage(
+                            response,
+                            "Error creando contacto"
+                        );
+                        throw new Error(message);
                     }
 
-                    await loadContacts();
-                    navigate("/");
+                    return await loadContacts();
                 } catch (err) {
-                    alert(err.message);
+                    setStore({ error: err.message, loading: false });
+                    return false;
                 }
             },
 
-            // --------------------------------------------------
-            // ACTUALIZAR CONTACTO
-            // --------------------------------------------------
-            updateContact: async (id, contact, navigate) => {
+            updateContact: async (id, contact) => {
                 const { loadContacts } = getActions();
 
-                const body = {
-                    name: contact.full_name,
-                    email: contact.email,
-                    phone: contact.phone,
-                    address: contact.address,
-                    agenda_slug: AGENDA_SLUG
-                };
+                const body = buildContactPayload(contact);
+
+                if (!body.name || !body.email || !body.phone || !body.address) {
+                    setStore({
+                        loading: false,
+                        error: "Please fill in all fields before saving."
+                    });
+                    return false;
+                }
+
+                if (!CONTACT_EMAIL_REGEX.test(body.email)) {
+                    setStore({
+                        loading: false,
+                        error: "Please enter a valid email address."
+                    });
+                    return false;
+                }
+
+                setStore({ loading: true, error: null });
 
                 try {
-                    const resp = await fetch(`${API_BASE}/contacts/${id}`, {
+                    const response = await fetch(`${API_BASE}/contacts/${id}`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(body)
                     });
 
-                    const data = await resp.json();
-                    if (!resp.ok) {
-                        throw new Error(data.msg || "Error actualizando contacto");
+                    if (!response.ok) {
+                        const message = await getApiErrorMessage(
+                            response,
+                            "Error actualizando contacto"
+                        );
+                        throw new Error(message);
                     }
 
-                    await loadContacts();
-                    navigate("/");
+                    return await loadContacts();
                 } catch (err) {
-                    alert(err.message);
+                    setStore({ error: err.message, loading: false });
+                    return false;
                 }
             },
 
-            // --------------------------------------------------
-            // ELIMINAR CONTACTO (CORREGIDO)
-            // --------------------------------------------------
             deleteContact: async (id) => {
                 const { loadContacts } = getActions();
 
+                setStore({ loading: true, error: null });
+
                 try {
-                    const resp = await fetch(
+                    const response = await fetch(
                         `${API_BASE}/agendas/${AGENDA_SLUG}/contacts/${id}`,
                         { method: "DELETE" }
                     );
 
-                    if (!resp.ok) {
-                        const text = await resp.text();
-                        throw new Error(text || "Error eliminando contacto");
+                    if (!response.ok) {
+                        const message = await getApiErrorMessage(
+                            response,
+                            "Error eliminando contacto"
+                        );
+                        throw new Error(message);
                     }
 
-                    await loadContacts();
+                    return await loadContacts();
                 } catch (err) {
-                    alert(err.message);
+                    setStore({ error: err.message, loading: false });
+                    return false;
                 }
             },
 
-            // --------------------------------------------------
-            // CONTACTO ACTUAL PARA EDITAR
-            // --------------------------------------------------
             setCurrentContact: (contact) => {
-                setStore({ currentContact: contact });
+                setStore({ currentContact: normalizeApiContact(contact) });
             },
 
             clearCurrentContact: () => {

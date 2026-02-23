@@ -4,7 +4,7 @@ import { ContactCard } from "../../components/ContactCard.jsx";
 import { Link } from "react-router-dom";
 
 export const Contact = () => {
-    const { store } = useContext(Context);
+    const { store, actions } = useContext(Context);
 
     return (
         <div className="contact-page">
@@ -16,7 +16,18 @@ export const Contact = () => {
             </div>
 
             {store.loading && <p>Loading contacts...</p>}
-            {store.error && <p className="text-danger">{store.error}</p>}
+            {store.error && (
+                <div className="alert alert-danger d-flex justify-content-between align-items-center py-2">
+                    <span>{store.error}</span>
+                    <button
+                        type="button"
+                        className="btn btn-outline-danger btn-sm"
+                        onClick={actions.loadContacts}
+                    >
+                        Retry
+                    </button>
+                </div>
+            )}
 
             {store.contacts.length === 0 && !store.loading ? (
                 <p>No contacts yet. Create one!</p>
