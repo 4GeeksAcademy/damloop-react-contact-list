@@ -3,7 +3,7 @@ import { Context } from "../js/store/appContext.jsx";
 import { useNavigate } from "react-router-dom";
 
 export const ContactCard = ({ contact }) => {
-    const { actions } = useContext(Context);
+    const { store, actions } = useContext(Context);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
 
@@ -16,9 +16,9 @@ export const ContactCard = ({ contact }) => {
         setShowModal(true);
     };
 
-    const confirmDelete = () => {
-        actions.deleteContact(contact.id);
-        setShowModal(false);
+    const confirmDelete = async () => {
+        const deleted = await actions.deleteContact(contact.id);
+        if (deleted) setShowModal(false);
     };
 
     const cancelDelete = () => {
@@ -39,12 +39,16 @@ export const ContactCard = ({ contact }) => {
                         <button
                             className="btn btn-outline-primary btn-sm"
                             onClick={handleEdit}
+                            disabled={store.loading}
+                            aria-label={`Edit ${contact.full_name}`}
                         >
                             <i className="fas fa-pencil-alt"></i>
                         </button>
                         <button
                             className="btn btn-outline-danger btn-sm"
                             onClick={handleDeleteClick}
+                            disabled={store.loading}
+                            aria-label={`Delete ${contact.full_name}`}
                         >
                             <i className="fas fa-trash"></i>
                         </button>
@@ -63,12 +67,14 @@ export const ContactCard = ({ contact }) => {
                             <button
                                 className="btn btn-secondary btn-sm"
                                 onClick={cancelDelete}
+                                disabled={store.loading}
                             >
                                 Cancel
                             </button>
                             <button
                                 className="btn btn-danger btn-sm"
                                 onClick={confirmDelete}
+                                disabled={store.loading}
                             >
                                 Delete
                             </button>
