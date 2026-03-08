@@ -8,6 +8,21 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+}
+
+#app {
+    min-height: 100vh;
+}
+
+.app-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-shell main {
+    flex: 1;
 }
 
 .container {
@@ -61,6 +76,20 @@ body {
     background: #c3f0ca !important;
 }
 
+.btn-outline-primary,
+.btn-outline-danger,
+.btn-outline-secondary,
+.btn-light {
+    background: #ffffff !important;
+    color: #222 !important;
+}
+
+.alert {
+    border: 3px solid #222;
+    border-radius: 16px;
+    box-shadow: 4px 4px 0px #222;
+}
+
 /* ----------------------------- */
 /*   CONTACT CARD CARTOON        */
 /* ----------------------------- */
@@ -86,6 +115,43 @@ body {
 .contact-card p {
     margin: 0;
     color: #555;
+}
+
+.contact-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.contact-feedback-card {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 20px;
+    border: 4px solid #222;
+    box-shadow: 6px 6px 0px #222;
+}
+
+.contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.contact-detail {
+    color: #555;
+}
+
+.contact-detail-label {
+    display: inline-block;
+    min-width: 72px;
+    margin-right: 0.35rem;
+    font-weight: 700;
+    color: #222;
+}
+
+.contact-list-footer {
+    font-weight: 600;
 }
 
 /* ----------------------------- */
@@ -124,6 +190,16 @@ body {
     outline: none;
     border-color: #ff8ba7;
     box-shadow: 0 0 0 4px rgba(255, 139, 167, 0.3);
+}
+
+.add-contact-form .invalid-feedback {
+    font-weight: 600;
+}
+
+.contact-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
 }
 
 /* ----------------------------- */
@@ -180,6 +256,31 @@ footer {
 footer span {
     font-weight: 600;
     color: #222;
+}
+
+@media (max-width: 768px) {
+    .contact-page-header {
+        flex-direction: column;
+    }
+
+    .add-contact-wrapper {
+        margin: 1rem auto;
+        padding: 1.5rem;
+    }
+
+    .contact-card {
+        padding: 1rem;
+    }
+
+    .contact-actions,
+    .contact-form-actions {
+        width: 100%;
+    }
+
+    .contact-actions .btn,
+    .contact-form-actions .btn {
+        flex: 1;
+    }
 }
 
 /* ----------------------------- */
